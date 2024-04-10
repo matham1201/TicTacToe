@@ -20,6 +20,26 @@ def client(server_ip):
             matrice(tab)
             print("Vous avez gagné !")
             break
+        elif reponse == "égalité":
+            matrice(tab)
+            print("Égalité !")
+            break
+        elif reponse == "perdu":
+            matrice(tab)
+            print("Vous avez perdu !")
+            break
+        elif reponse == "valide":
+            row, col = map(int, input("Entrez la ligne et la colonne séparer d'une virgule : ").split())
+            if joueur == joueur1:
+                tab[row][col] = joueur1
+                joueur = joueur2
+            else:
+                tab[row][col] = joueur2
+                joueur = joueur1
+            matrice(tab)
+        elif reponse == "invalide":
+            print("Coup invalide, réessayez !")
+
 
     client_socket.close() 
 
