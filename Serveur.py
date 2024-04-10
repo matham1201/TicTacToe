@@ -26,16 +26,24 @@ def main():
     joueur1 = random.choice(['X', 'O'])
     connection.sendall(f"{joueur1}\n".encode())
     joueur2 = 'X' if joueur1 == 'O' else 'O'
+    joueur = joueur1
 
     while True:
         print(f"Joueur {joueur}")
         choix = connection.recv(1024).decode().strip()
+        choix = int(choix)
         
         if tab[choix - 1] in ["X", "O"]:
             print("Case déjà prise")
+            connection.sendall("invalide".encode())
+        elif choix < 1 or choix > 9:
+            print("Case invalide")
+            connection.sendall("invalide".encode())            
         else:
             tab[choix - 1] = joueur
             joueur = joueur1 if joueur == joueur2 else joueur2
+            connection.sendall("valide".encode())
+            
             
         afficher(tab)
         
@@ -48,10 +56,12 @@ def main():
         for ligne in lignes_gagnantes:
             if tab[ligne[0]] == tab[ligne[1]] == tab[ligne[2]]:
                 print(f"Joueur {joueur} a gagné")
+                connection.sendall("Gagné".encode())
                 break
         else:
             if all(symbole in ["X", "O"] for symbole in tab):
                 print("Match nul")
+                connection.sendall("égalité".encode())
                 break
 
     connection.close()
