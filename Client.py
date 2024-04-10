@@ -15,6 +15,9 @@ def client(server_ip):
     print(f"Vous êtes le joueur {joueur1}")
 
     while True:
+        choix = input(f"Joueur {joueur}, entrez (ligne,colonne) : ")
+        client_socket.sendall(choix.encode())
+
         reponse = client_socket.recv(1024).decode().strip()
         if reponse == "gagner":
             matrice(tab)
@@ -29,7 +32,7 @@ def client(server_ip):
             print("Vous avez perdu !")
             break
         elif reponse == "valide":
-            row, col = map(int, input("Entrez la ligne et la colonne séparer d'une virgule : ").split())
+            row, col = map(int, choix.split(','))
             if joueur == joueur1:
                 tab[row][col] = joueur1
                 joueur = joueur2
@@ -43,8 +46,8 @@ def client(server_ip):
 
     client_socket.close() 
 
-
-server_ip = input("Entrer l'IP du serveur : ") # On demande à l'utilisateur de rentrer l'adresse IP du serveur
-client(server_ip)
+if __name__ == "__main__":
+    server_ip = input("Entrer l'IP du serveur : ") # On demande à l'utilisateur de rentrer l'adresse IP du serveur
+    client(server_ip)
 
 
